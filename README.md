@@ -38,7 +38,7 @@ utc_datetime.
 
 **Migration**
 
-Paranoid works by considering any non-null `deleted_at timestamp to be
+Paranoid works by considering any non-null `deleted_at` timestamp to be
 "deleted". This migration adds this column.
 
 ```elixir
