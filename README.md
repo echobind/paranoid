@@ -57,7 +57,6 @@ Paranoid makes available changesets for soft deleting and recovery of records. L
 
 In order to leverage the newly added field, the field must be added to your schema.
 
-Additionally, you will need to add this line to your schema.
 ```elixir
 field(:deleted_at, :utc_datetime)
 ```
