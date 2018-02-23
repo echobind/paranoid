@@ -95,8 +95,6 @@ defmodule Paranoid.Ecto do
         end
 
         def update!(struct, opts \\ []) do
-          IO.inspect(struct, label: "Update struct")
-
           unquote(repo)
           |> apply(:update!, [struct, opts])
         end
