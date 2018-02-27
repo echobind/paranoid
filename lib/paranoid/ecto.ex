@@ -71,7 +71,7 @@ defmodule Paranoid.Ecto do
 
         def delete_all(queryable, opts, _has_deleted_column = true) do
           unquote(repo)
-          |> apply(:update_all, [queryable, update: [set: [deleted_at: Ecto.DateTime.utc()]]])
+          |> apply(:update_all, [update_queryable(queryable, opts), [set: [deleted_at: DateTime.utc_now()]]])
         end
 
         def delete_all(queryable, opts, _no_deleted_column) do
