@@ -1,5 +1,7 @@
 # Paranoid
 
+[![CircleCI](https://circleci.com/gh/echobind/paranoid.svg?style=svg)](https://circleci.com/gh/echobind/paranoid)
+
 **Paranoid is a project providing soft delete capabilities**
 
 Paranoid provides an easy mechanism for Ecto-driven projects to soft delete
