@@ -13,6 +13,7 @@ defmodule Paranoid.MixProject do
       deps: deps(),
       description: "Library for soft deletion of database records.",
       elixirc_paths: elixirc_paths(Mix.env),
+      docs: [main: "readme", extras: ["README.md"]],
       aliases: aliases(),
       package: package()
     ]
