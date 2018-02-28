@@ -22,7 +22,7 @@ defmodule Paranoid.Changeset do
       end
 
       defp add_deleted_at_time(attrs) do
-        attrs |> Map.put("deleted_at", Ecto.DateTime.utc())
+        attrs |> Map.put("deleted_at", DateTime.utc_now())
       end
 
       defp nullify_deleted_at_time(attrs) do

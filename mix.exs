@@ -1,7 +1,7 @@
 defmodule Paranoid.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.3"
   @project_url "https://github.com/echobind/paranoid"
 
   def project do
@@ -12,19 +12,26 @@ defmodule Paranoid.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: "Library for soft deletion of database records.",
+      elixirc_paths: elixirc_paths(Mix.env),
+      aliases: aliases(),
       package: package()
     ]
   end
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: app_list(Mix.env),
     ]
   end
 
+  def app_list(:test), do: app_list() ++ [:ecto, :postgrex]
+  def app_list(_), do: app_list()
+  def app_list(), do: [:logger]
+
   defp deps do
     [
-      {:ecto, "~> 2.2"},
+      {:ecto, "~> 2.2", optional: true},
+      {:postgrex, ">= 0.0.0", only: [:test]},
       {:ex_doc, "~> 0.18.3", only: :dev}
     ]
   end
@@ -37,6 +44,17 @@ defmodule Paranoid.MixProject do
         "GitHub" => @project_url,
         "Made by echobind" => "https://echobind.com"
       }
+    ]
+  end
+
+  defp elixirc_paths(:test), do: elixirc_paths() ++ ["test/support", "test/support/models"]
+  defp elixirc_paths(_), do: elixirc_paths()
+  defp elixirc_paths(), do: ["lib"]
+
+
+  defp aliases do
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
