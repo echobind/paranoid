@@ -6,6 +6,7 @@ defmodule Paranoid.User do
   schema "users" do
     field :name, :string
     field :deleted_at, :utc_datetime
+    has_many :addresses, Paranoid.Address
   end
 
   def changeset(struct, attrs) do
