@@ -17,7 +17,7 @@ Update `mix.exs` by adding Paranoid.
 ```elixir
 def deps() do
   [
-    {:paranoid, "~> 0.1.0"}
+    {:paranoid, "~> 0.1.4"}
   ]
 ```
 
