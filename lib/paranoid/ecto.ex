@@ -127,8 +127,30 @@ defmodule Paranoid.Ecto do
         end
 
         def preload(struct_or_structs_or_nil, preloads, opts \\ []) do
-          unquote(repo).preload(struct_or_structs_or_nil, preloads, opts)
+          #IO.inspect struct_or_structs_or_nil
+          #IO.inspect preloads
+
+          unquote(repo).preload(struct_or_structs_or_nil, update_preload(struct_or_structs_or_nil, preloads), opts)
         end
+
+        def update_preload(mod, true) do
+          mod |> where([d], is_nil(d.deleted_at))
+        end
+
+        def update_preload(struct, preloads) do
+          IO.inspect preloads, label: "preloads"
+          struct_definition = struct.__struct__
+
+          x = preloads
+          |> Enum.reduce([], fn(preload, acc) ->
+            mod = struct_definition.__schema__(:association, preload).related
+            query = update_preload(mod, has_deleted_column?(mod))
+            IO.inspect preload
+            [Atom.to_string(preload): query]
+          end)
+          x
+        end
+
 
         def load(schema_or_types, data) do
           unquote(repo).load(schema_or_types, data)

@@ -8,6 +8,7 @@ defmodule Paranoid.EctoTest do
   alias Paranoid.TestRepo
   alias Paranoid.Repo
   alias Paranoid.User
+  alias Paranoid.Address
 
   def insert_user() do
     {:ok, user} = %User{}
@@ -17,12 +18,24 @@ defmodule Paranoid.EctoTest do
   end
 
   def insert_deleted_user() do
-    {:ok, user} = %User{}
-           |> User.changeset(%{name: "Test User"})
-           |> TestRepo.insert()
+    {:ok, deleted_user } = insert_user()
+                   |> Repo.delete()
 
-    {:ok, deleted_user } = Repo.delete(user)
     deleted_user
+  end
+
+  def insert_address(%User{} = user) do
+    {:ok, address} = %Address{}
+                     |> Address.changeset(%{user: user, house_number: "13", street: "Main Street", city: "Boston", state: "MA", zip: "02446"})
+                     |> TestRepo.insert()
+
+    address
+  end
+
+  def insert_deleted_address(%User{} = user) do
+    {:ok, deleted_address} = insert_address(user) |> Repo.delete()
+
+    deleted_address
   end
 
   def query(user) do
@@ -344,11 +357,11 @@ defmodule Paranoid.EctoTest do
 
   test "preload/3 functions normally" do
     user = insert_user()
-    address = %{house_number: "123", street: "Main Street", city: "Boston", state: "MA", zip: "02116"}
-    address = Ecto.build_assoc(user, :addresses, address)
-    {:ok, %Paranoid.Address{} = address} = TestRepo.insert(address)
+    address = insert_address(user)
 
-    user = Repo.get(User, user.id) |> Repo.preload(:addresses)
+    user = Repo.get(User, user.id) |> Repo.preload([:addresses])
+    address = Repo.get(Address, address.id)
+
     addresses = user.addresses
     assert addresses == [address]
   end
