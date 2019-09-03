@@ -250,7 +250,8 @@ defmodule Paranoid.EctoTest do
     visible_user = insert_user()
     insert_deleted_user()
 
-    {count, [updated_user]} = Repo.update_all(User, [set: [name: "Test"]], returning: [:id, :name])
+    {count, [updated_user]} = from(u in User, select: map(u, [:id, :name]))
+                              |> Repo.update_all([set: [name: "Test"]])
     assert updated_user.name == "Test"
     assert updated_user.id == visible_user.id
     assert count == 1
@@ -260,7 +261,8 @@ defmodule Paranoid.EctoTest do
     visible_user = insert_user()
     deleted_user = insert_deleted_user()
 
-    {count, updated_users} = Repo.update_all(User, [set: [name: "Test"]], returning: [:id, :name], include_deleted: true)
+    {count, updated_users} = from(u in User, select: map(u, [:id, :name]))
+                              |> Repo.update_all([set: [name: "Test"]], include_deleted: true)
     assert count == 2
     user_ids = updated_users |> Enum.map(&(&1.id)) |> Enum.sort()
 
