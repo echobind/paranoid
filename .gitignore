@@ -6,4 +6,5 @@
 erl_crash.dump
 *.ez
 paranoid-*.tar
+/.elixir_ls/
 
